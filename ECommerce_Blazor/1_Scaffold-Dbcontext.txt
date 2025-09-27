@@ -1,0 +1,6 @@
+
+
+Scaffold-DbContext
+“Server=MY-PC\SQLEXPRESS; Database=OnlineShop;Trusted_Connection=True;TrustServerCertificate=true”
+Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models/Db -force -dataannotation
+

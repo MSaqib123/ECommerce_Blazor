@@ -1,10 +1,13 @@
 using ECommerce_Blazor.Components;
+//using ECommerce_Blazor.Models.Db;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+//builder.Services.AddDbContextFactory<EcommerceBlazorContext>();
+//builder.Services.AddQuickGridEntityFrameworkAdapter();
 
 var app = builder.Build();
 
