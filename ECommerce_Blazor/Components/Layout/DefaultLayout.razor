@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject IDbContextFactory<ECommerce_Blazor.Models.Db.EcommerceBlazorContext> DbFactory
 
     <!--offcanvas menu area start-->
     <div class="body_overlay">
@@ -50,7 +51,13 @@
                         </div>
                         <div id="menu" class="text-left ">
                             <ul class="offcanvas_main_menu">
-                                <li class="menu-item-has-children active">
+                            @foreach (var item in TopMenu)
+                            {
+                            <li>
+                                <a href="@item.Link">@item.MenuTitle</a>
+                            </li>
+                            }
+                                @* <li class="menu-item-has-children active">
                                     <a href="#">Home</a>
                                 </li>
                                 <li class="menu-item-has-children">
@@ -75,7 +82,7 @@
                                     </ul>
 
                                 </li>
-                                <li><a href="#">buy</a></li>
+                                <li><a href="#">buy</a></li> *@
                             </ul>
                         </div>
                     </div>
@@ -216,7 +223,13 @@
                             <div class="main_menu d-none d-lg-block">
                                 <nav>
                                     <ul class="d-flex">
-                                        <li><a class="active" href="index.html">demo</a> </li>
+                                        @foreach (var item in TopMenu)
+                                    {
+                                        <li>
+                                            <a href="@item.Link">@item.MenuTitle</a>
+                                        </li>
+                                    }
+                                        @* <li><a class="active" href="index.html">demo</a> </li>
                                         <li><a href="shop.html">shop</a></li>
                                         <li><a href="product-details.html">product</a></li>
                                         <li><a href="#">sale</a></li>
@@ -232,7 +245,7 @@
                                                 <li><a href="blog-details.html">Blog Details</a></li>
                                             </ul>
                                         </li>
-                                        <li><a href="#">buy</a></li>
+                                        <li><a href="#">buy</a></li> *@
                                     </ul>
                                 </nav>
                             </div>
@@ -298,11 +311,17 @@
                     <div class="footer_widget_list text-right">
                         <div class="footer_menu">
                             <ul class="d-flex justify-content-end">
-                                <li><a href="index.html">home</a></li>
+                                @foreach (var item in BottomMenu)
+                                {
+                                    <li>
+                                        <a href="@item.Link">@item.MenuTitle</a>
+                                    </li>
+                                }
+                                @* <li><a href="index.html">home</a></li>
                                 <li><a href="shop.html">Shop</a></li>
                                 <li><a href="product-details.html">Product</a></li>
                                 <li><a href="#">pages</a></li>
-                                <li><a href="blog.html">Blog</a></li>
+                                <li><a href="blog.html">Blog</a></li> *@
                             </ul>
                         </div>
                         <div class="footer_social">
@@ -417,3 +436,21 @@
 
 
 
+@code{
+    public List<Menu> TopMenu { get; set; } = new List<Menu>();
+    public List<Menu> BottomMenu { get; set; } = new List<Menu>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var db = DbFactory.CreateDbContext();
+        TopMenu = await db.Menus
+            .Where(m => m.Type == "Top")
+            .OrderBy(m => m.Id)
+            .ToListAsync();
+        BottomMenu = await db.Menus
+            .Where(m => m.Type == "Bottom")
+            .OrderBy(m => m.Id)
+            .ToListAsync();
+    }
+
+}
